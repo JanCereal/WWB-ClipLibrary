@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Library</title>
+    <title>GitHub Video Player</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<h1>Video Library</h1>
+<h1>GitHub Video Player</h1>
 
 <ul id="videoList"></ul>
 
@@ -37,7 +37,7 @@
         fetchVideos();
 
         function fetchVideos() {
-            fetch(`${folderPath}videos.json`) // Assuming a JSON file with video information is present
+            fetch(`${folderPath}videos.json`)
                 .then(response => response.json())
                 .then(videos => {
                     displayVideos(videos);

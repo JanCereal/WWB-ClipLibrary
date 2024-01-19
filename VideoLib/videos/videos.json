@@ -1,7 +1,7 @@
 [
     {
         "filename": "test.mp4",
-        "title": "Sample Video 1",
-        "tags": ["cs2", "grenade"]
+        "title": "Introduction to Web Development",
+        "tags": ["tutorial", "web development"]
     }
 ]
