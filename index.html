@@ -12,16 +12,6 @@
             margin: 0;
             padding: 0;
             overflow: hidden; /* Prevent scrollbars caused by the animation */
-            animation: gradientAnimation 10s infinite alternate; /* Apply the animation to the body */
-        }
-
-        @keyframes gradientAnimation {
-            0% {
-                background: linear-gradient(to right, #a9d4b2, #c0dfab);
-            }
-            100% {
-                background: linear-gradient(to right, #c0dfab, #a9d4b2);
-            }
         }
 
         #header {
@@ -164,6 +154,7 @@
         <video id="modalVideo" controls class="modal-video"></video>
     </div>
 </div>
+
 <script>
     window.onload = function () {
         const videoList = document.getElementById('videoList');
@@ -212,7 +203,7 @@
                 listItem.appendChild(videoElement);
 
                 // Display video information
-                const infoParagraph = document.createElement('div');
+                const infoParagraph = document.createElement('p');
                 infoParagraph.textContent = `Title: ${video.title}`;
                 listItem.appendChild(infoParagraph);
 
