@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Video Player</title>
+    <title>GitHub Video Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-2UAOYxy2HDPaKjEuCYtpuZtf7dXkwIFq7v5wUsRQvd1Quj2uCEtdetdMmOQ2VW82pA2ir87KPAkoM+fHz3lG7Q==" crossorigin="anonymous" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,11 +19,16 @@
         #videoList li {
             margin-bottom: 10px;
         }
+
+        .video-icon {
+            font-size: 48px;
+            color: #3498db; /* Adjust the color as needed */
+        }
     </style>
 </head>
 <body>
 
-<h1>GitHub Video Player</h1>
+<h1>GitHub Video Library</h1>
 
 <ul id="videoList"></ul>
 
@@ -51,17 +57,13 @@
 
             videos.forEach(function (video) {
                 const listItem = document.createElement('li');
-                const videoElement = document.createElement('video');
+                
+                // Create an icon element
+                const iconElement = document.createElement('i');
+                iconElement.classList.add('fas', 'fa-film', 'video-icon'); // Using FontAwesome film icon
 
-                // Set the source of the video element
-                videoElement.src = `${folderPath}${video.filename}`;
-
-                // Set additional attributes
-                videoElement.controls = true;
-                videoElement.width = 400;
-
-                // Append the video element to the list item
-                listItem.appendChild(videoElement);
+                // Append the icon element to the list item
+                listItem.appendChild(iconElement);
 
                 // Display video information
                 const infoParagraph = document.createElement('p');
