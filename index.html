@@ -11,7 +11,7 @@
             font-family: 'Verdana', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1b5527; /* Forest green background */
+            background-color: #34613e; /* Forest green background */
         }
 
         #header {
@@ -54,7 +54,7 @@
 
         .video-item {
             width: 400px; /* Set a static width for the video boxes */
-            height: 225px; /* Set a static height for the video boxes */
+            height: 225px; /* Adjusted height to show more content */
             overflow: hidden; /* Hide any content that overflows the box */
             cursor: pointer;
             text-align: center;
@@ -62,12 +62,26 @@
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+            display: flex;
+            flex-direction: column; /* Align content in a column layout */
         }
 
         .video-item video {
+            flex-grow: 1; /* Make the video take up remaining space in the container */
             width: 100%; /* Make the video fill its container */
             height: 100%; /* Make the video fill its container */
             object-fit: cover; /* Maintain aspect ratio and cover the entire container */
+        }
+
+        .video-info {
+            padding: 10px;
+            background-color: #c0dfab; /* Lighter green background for the description */
+            border-top: 1px solid #3b593a; /* Dark green border at the top of the description */
+            border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
+        }
+
+        .tags {
+            margin-top: 10px; /* Add space between the video and tags */
         }
 
         .video-icon {
@@ -117,7 +131,7 @@
 <body>
 
 <div id="header">
-    <h1>WWB ClipLib</h1>
+    <h1>Forest Video Library</h1>
 </div>
 
 <div id="filterContainer">
@@ -187,8 +201,16 @@
 
                 // Display video information
                 const infoParagraph = document.createElement('p');
-                infoParagraph.textContent = `Title: ${video.title} | Tags: ${video.tags.join(', ')}`;
+                infoParagraph.textContent = `Title: ${video.title}`;
                 listItem.appendChild(infoParagraph);
+
+                // Display tags
+                const tagsContainer = document.createElement('div');
+                tagsContainer.className = 'tags';
+                const tagsParagraph = document.createElement('p');
+                tagsParagraph.textContent = `Tags: ${video.tags.join(', ')}`;
+                tagsContainer.appendChild(tagsParagraph);
+                listItem.appendChild(tagsContainer);
 
                 // Append the list item to the video list
                 videoList.appendChild(listItem);
