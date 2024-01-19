@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forest Video Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon" sizes="170x169">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <style>
         body {
             font-family: 'Verdana', sans-serif;
@@ -15,19 +15,32 @@
         }
 
         #header {
-            background-image: url(assets/DudeInWoods.jpg); /* Use DudeInWoods.jpg for the parallax effect */
+            background-image: url('DudeInWoods.jpg'); /* Use DudeInWoods.jpg for the parallax effect */
             background-size: cover;
             background-attachment: fixed; /* Ensure the background image stays fixed */
             background-position: center;
             height: 200px;
-            text-align: center;
-            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             color: #fff; /* White text color */
         }
 
         h1 {
             margin: 0;
             font-size: 2em;
+        }
+
+        #filterContainer {
+            margin: 10px 0 20px 20px; /* Add space above and to the left of the filter */
+        }
+
+        #tagFilter {
+            background-color: #c0dfab; /* Lighter green dropdown background */
+            color: #3b593a; /* Dark green dropdown text color */
+            border: 1px solid #3b593a; /* Dark green dropdown border */
+            border-radius: 5px;
+            padding: 5px;
         }
 
         #videoList {
@@ -40,8 +53,8 @@
         }
 
         .video-item {
-            width: 400px; /* Set a static width for the video boxes */
-            height: 225px; /* Set a static height for the video boxes */
+            width: 200px; /* Set a static width for the video boxes */
+            height: 220px; /* Set a static height for the video boxes */
             overflow: hidden; /* Hide any content that overflows the box */
             cursor: pointer;
             text-align: center;
@@ -60,15 +73,6 @@
         .video-icon {
             font-size: 24px;
             color: #6b8c61; /* Olive green icon color */
-        }
-
-        #tagFilter {
-            margin-bottom: 10px;
-            background-color: #c0dfab; /* Lighter green dropdown background */
-            color: #3b593a; /* Dark green dropdown text color */
-            border: 1px solid #3b593a; /* Dark green dropdown border */
-            border-radius: 5px;
-            padding: 5px;
         }
 
         /* Modal styles */
@@ -113,10 +117,10 @@
 <body>
 
 <div id="header">
-    <h1>Test 2</h1>
+    <h1>Forest Video Library</h1>
 </div>
 
-<div>
+<div id="filterContainer">
     <label for="tagFilter">Filter by Tag:</label>
     <select id="tagFilter" onchange="filterVideos()">
         <option value="all">All Tags</option>
