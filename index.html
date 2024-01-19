@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Video Library</title>
+    <title>Forest Video Library</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-rC2iFlUKHY7gK0C8a5ytOPnNaiF7ZcHQ+7z2PLGt3sI7iSi4HQ7bE4/Emo2O1nzUYRIvQgQFYPpdHyz8eV3f5Q==" crossorigin="anonymous" />
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Verdana', sans-serif;
             margin: 20px;
+            background-color: #a9d4b2; /* Forest green background */
+        }
+
+        h1 {
+            color: #3b593a; /* Dark green header color */
         }
 
         #videoList {
@@ -23,15 +28,24 @@
             flex: 0 0 calc(20% - 20px);
             cursor: pointer;
             text-align: center;
+            background-color: #d3e0cf; /* Light green video background */
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
         }
 
         .video-icon {
             font-size: 48px;
-            color: #3498db; /* Adjust the color as needed */
+            color: #6b8c61; /* Olive green icon color */
         }
 
         #tagFilter {
             margin-bottom: 10px;
+            background-color: #c0dfab; /* Lighter green dropdown background */
+            color: #3b593a; /* Dark green dropdown text color */
+            border: 1px solid #3b593a; /* Dark green dropdown border */
+            border-radius: 5px;
+            padding: 5px;
         }
 
         /* Modal styles */
@@ -51,6 +65,10 @@
             max-width: 400px;
             width: 100%;
             max-height: 300px;
+            background-color: #fff; /* White modal background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Shadow for the modal */
         }
 
         .modal-video {
@@ -64,14 +82,14 @@
             top: 15px;
             right: 15px;
             font-size: 24px;
-            color: #fff;
+            color: #3b593a; /* Dark green close icon color */
             cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<h1>GitHub Video Library</h1>
+<h1>Forest Video Library</h1>
 
 <div>
     <label for="tagFilter">Filter by Tag:</label>
