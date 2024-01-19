@@ -2,22 +2,22 @@
     {
         "filename": "grenades.mp4",
         "title": "Kobe",
-        "tags": ["nade", "w"]
+        "tags": ["Grenade", "W"]
     },
     {
         "filename": "CsHeadshotTBC.mp4",
         "title": "To be continued",
-        "tags": ["multikill", "deagle", "headshot", "w"]
+        "tags": ["Multikill", "Desert Eagle", "W"]
     },
     {
         "filename": "GetDownMrPresident.mp4",
         "title": "Get Down Mr President",
-        "tags": ["tutorial", "headshot", "l"]
+        "tags": ["tutorial", "headshot", "L"]
     },
     {
         "filename": "CsHeadshot.mp4",
         "title": "Oof",
-        "tags": ["ak", "headshot", "w"]
+        "tags": ["Ak-47", "W"]
     }
 
 ]
