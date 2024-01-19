@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Video Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-2UAOYxy2HDPaKjEuCYtpuZtf7dXkwIFq7v5wUsRQvd1Quj2uCEtdetdMmOQ2VW82pA2ir87KPAkoM+fHz3lG7Q==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-rC2iFlUKHY7gK0C8a5ytOPnNaiF7ZcHQ+7z2PLGt3sI7iSi4HQ7bE4/Emo2O1nzUYRIvQgQFYPpdHyz8eV3f5Q==" crossorigin="anonymous" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,6 +92,9 @@
             const allTags = videos.reduce((tags, video) => tags.concat(video.tags), []);
             const uniqueTags = [...new Set(allTags)]; // Get unique tags
 
+            // Clear previous options
+            tagFilter.innerHTML = '<option value="all">All Tags</option>';
+
             // Populate dropdown with tags
             uniqueTags.forEach(tag => {
                 const option = document.createElement('option');
@@ -103,8 +106,11 @@
 
         window.filterVideos = function () {
             const selectedTag = tagFilter.value;
-            fetchVideos(); // Reset the video list
-            if (selectedTag !== 'all') {
+            if (selectedTag === 'all') {
+                // If 'All Tags' selected, fetch and display all videos
+                fetchVideos();
+            } else {
+                // If a specific tag is selected, filter videos by tag
                 const filteredVideos = Array.from(videoList.children).filter(video => {
                     const tags = video.querySelector('p').textContent.split(': ')[1].split(', ');
                     return tags.includes(selectedTag);
