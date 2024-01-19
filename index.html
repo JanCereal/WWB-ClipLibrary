@@ -10,11 +10,11 @@
             font-family: 'Verdana', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #05330f; /* Forest green background */
+            background-color: #a9d4b2; /* Forest green background */
         }
 
         #header {
-            background-image: url('assets/DudeInWoods.jpg'); /* Use DudeInWoods.jpg for the parallax effect */
+            background-image: url('DudeInWoods.jpg'); /* Use DudeInWoods.jpg for the parallax effect */
             background-size: cover;
             background-attachment: fixed; /* Ensure the background image stays fixed */
             background-position: center;
@@ -40,13 +40,20 @@
 
         .video-item {
             width: 200px; /* Set a static width for the video boxes */
-            height: 150px; /* Set a static height for the video boxes */
+            height: 220px; /* Set a static height for the video boxes */
+            overflow: hidden; /* Hide any content that overflows the box */
             cursor: pointer;
             text-align: center;
             background-color: #d3e0cf; /* Light green video background */
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+        }
+
+        .video-item video {
+            width: 100%; /* Make the video fill its container */
+            height: 100%; /* Make the video fill its container */
+            object-fit: cover; /* Maintain aspect ratio and cover the entire container */
         }
 
         .video-icon {
@@ -105,7 +112,7 @@
 <body>
 
 <div id="header">
-    <h1>Test 1</h1>
+    <h1>Test 2</h1>
 </div>
 
 <div>
