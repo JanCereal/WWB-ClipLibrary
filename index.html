@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Video Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-rC2iFlUKHY7gK0C8a5ytOPnNaiF7ZcHQ+7z2PLGt3sI7iSi4HQ7bE4/Emo2O1nzUYRIvQgQFYPpdHyz8eV3f5Q==" crossorigin="anonymous" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +18,7 @@
 
         #videoList li {
             margin-bottom: 10px;
+            cursor: pointer;
         }
 
         .video-icon {
@@ -27,6 +28,38 @@
 
         #tagFilter {
             margin-bottom: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .modal-video {
+            width: 100%;
+            height: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -44,10 +77,20 @@
 
 <ul id="videoList"></ul>
 
+<!-- Modal for displaying videos -->
+<div id="videoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <video id="modalVideo" controls class="modal-video"></video>
+    </div>
+</div>
+
 <script>
     window.onload = function () {
         const videoList = document.getElementById('videoList');
         const tagFilter = document.getElementById('tagFilter');
+        const videoModal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modalVideo');
 
         // Folder path where videos are stored
         const folderPath = 'videos/';
@@ -78,6 +121,11 @@
                 // Create an icon element
                 const iconElement = document.createElement('i');
                 iconElement.classList.add('fas', 'fa-film', 'video-icon'); // Using FontAwesome film icon
+
+                // Set up click event to open modal
+                iconElement.onclick = function () {
+                    openModal(video.filename);
+                };
 
                 // Append the icon element to the list item
                 listItem.appendChild(iconElement);
@@ -117,6 +165,24 @@
                 // If a specific tag is selected, filter videos by tag
                 const filteredVideos = allVideos.filter(video => video.tags.includes(selectedTag));
                 displayVideos(filteredVideos);
+            }
+        };
+
+        function openModal(videoFilename) {
+            const videoPath = `${folderPath}${videoFilename}`;
+            modalVideo.src = videoPath;
+            videoModal.style.display = 'flex';
+        }
+
+        window.closeModal = function () {
+            modalVideo.pause();
+            videoModal.style.display = 'none';
+        };
+
+        // Close the modal if the user clicks outside of it
+        window.onclick = function (event) {
+            if (event.target === videoModal) {
+                closeModal();
             }
         };
     };
