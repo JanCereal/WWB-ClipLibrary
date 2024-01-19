@@ -52,6 +52,9 @@
         // Folder path where videos are stored
         const folderPath = 'videos/';
 
+        // Array to store all videos
+        let allVideos = [];
+
         // Fetch video files from the server
         fetchVideos();
 
@@ -59,6 +62,7 @@
             fetch(`${folderPath}videos.json`)
                 .then(response => response.json())
                 .then(videos => {
+                    allVideos = videos; // Store all videos for reference
                     displayVideos(videos);
                     populateTagFilter(videos);
                 })
@@ -107,16 +111,12 @@
         window.filterVideos = function () {
             const selectedTag = tagFilter.value;
             if (selectedTag === 'all') {
-                // If 'All Tags' selected, fetch and display all videos
-                fetchVideos();
+                // If 'All Tags' selected, display all videos
+                displayVideos(allVideos);
             } else {
                 // If a specific tag is selected, filter videos by tag
-                const filteredVideos = Array.from(videoList.children).filter(video => {
-                    const tags = video.querySelector('p').textContent.split(': ')[1].split(', ');
-                    return tags.includes(selectedTag);
-                });
-                videoList.innerHTML = ''; // Clear previous videos
-                filteredVideos.forEach(video => videoList.appendChild(video));
+                const filteredVideos = allVideos.filter(video => video.tags.includes(selectedTag));
+                displayVideos(filteredVideos);
             }
         };
     };
