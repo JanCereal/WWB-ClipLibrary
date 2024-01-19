@@ -8,12 +8,24 @@
     <style>
         body {
             font-family: 'Verdana', sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #a9d4b2; /* Forest green background */
         }
 
+        #header {
+            background-image: url('assets/header.png');
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+            text-align: center;
+            padding: 20px;
+            color: #fff; /* White text color */
+        }
+
         h1 {
-            color: #3b593a; /* Dark green header color */
+            margin: 0;
+            font-size: 2em;
         }
 
         #videoList {
@@ -22,6 +34,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            margin: 20px;
         }
 
         .video-item {
@@ -89,7 +102,9 @@
 </head>
 <body>
 
-<h1>Forest Video Library</h1>
+<div id="header">
+    <h1>Forest Video Library</h1>
+</div>
 
 <div>
     <label for="tagFilter">Filter by Tag:</label>
