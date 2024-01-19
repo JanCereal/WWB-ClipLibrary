@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forest Video Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-rC2iFlUKHY7gK0C8a5ytOPnNaiF7ZcHQ+7z2PLGt3sI7iSi4HQ7bE4/Emo2O1nzUYRIvQgQFYPpdHyz8eV3f5Q==" crossorigin="anonymous" />
     <style>
         body {
             font-family: 'Verdana', sans-serif;
@@ -33,12 +33,12 @@
             padding: 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 10px; /* Adjust the gap between videos */
             margin: 20px;
         }
 
         .video-item {
-            flex: 0 0 calc(20% - 20px);
+            flex: 0 0 calc(25% - 10px); /* Approximately a fourth of the width with gap adjustment */
             cursor: pointer;
             text-align: center;
             background-color: #d3e0cf; /* Light green video background */
@@ -48,7 +48,7 @@
         }
 
         .video-icon {
-            font-size: 48px;
+            font-size: 24px;
             color: #6b8c61; /* Olive green icon color */
         }
 
