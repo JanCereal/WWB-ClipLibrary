@@ -34,11 +34,13 @@
             justify-content: center;
             align-items: center;
             color: #fff; /* White text color */
+            position: relative;
         }
 
         h1 {
             margin: 0;
             font-size: 2em;
+            z-index: 1;
         }
 
         #filterContainer {
@@ -51,6 +53,7 @@
             border: 1px solid #3b593a; /* Dark green dropdown border */
             border-radius: 5px;
             padding: 5px;
+            z-index: 1;
         }
 
         #videoList {
@@ -84,7 +87,6 @@
         }
 
         .video-info {
-            padding: 10px;
             background-color: #c0dfab; /* Lighter green background for the description */
             border-top: 1px solid #3b593a; /* Dark green border at the top of the description */
             border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
@@ -162,7 +164,6 @@
         <video id="modalVideo" controls class="modal-video"></video>
     </div>
 </div>
-
 <script>
     window.onload = function () {
         const videoList = document.getElementById('videoList');
