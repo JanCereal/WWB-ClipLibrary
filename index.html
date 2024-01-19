@@ -11,7 +11,17 @@
             font-family: 'Verdana', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #34613e; /* Forest green background */
+            overflow: hidden; /* Prevent scrollbars caused by the animation */
+            animation: gradientAnimation 10s infinite alternate; /* Apply the animation to the body */
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background: linear-gradient(to right, #a9d4b2, #c0dfab);
+            }
+            100% {
+                background: linear-gradient(to right, #c0dfab, #a9d4b2);
+            }
         }
 
         #header {
@@ -54,7 +64,7 @@
 
         .video-item {
             width: 400px; /* Set a static width for the video boxes */
-            height: 300px; /* Adjusted height to show more content */
+            height: 225px; /* Adjusted height to show more content */
             overflow: hidden; /* Hide any content that overflows the box */
             cursor: pointer;
             text-align: center;
@@ -78,10 +88,11 @@
             background-color: #c0dfab; /* Lighter green background for the description */
             border-top: 1px solid #3b593a; /* Dark green border at the top of the description */
             border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
+            margin-bottom: 0; /* Remove bottom margin */
         }
 
         .tags {
-            margin-top: 10px; /* Add space between the video and tags */
+            margin-top: 5px; /* Adjust space between the video and tags */
         }
 
         .video-icon {
@@ -153,116 +164,7 @@
 </div>
 
 <script>
-    window.onload = function () {
-        const videoList = document.getElementById('videoList');
-        const tagFilter = document.getElementById('tagFilter');
-        const videoModal = document.getElementById('videoModal');
-        const modalVideo = document.getElementById('modalVideo');
-
-        // Folder path where videos are stored
-        const folderPath = 'videos/';
-
-        // Array to store all videos
-        let allVideos = [];
-
-        // Fetch video files from the server
-        fetchVideos();
-
-        function fetchVideos() {
-            fetch(`${folderPath}videos.json`)
-                .then(response => response.json())
-                .then(videos => {
-                    allVideos = videos; // Store all videos for reference
-                    displayVideos(videos);
-                    populateTagFilter(videos);
-                })
-                .catch(error => console.error('Error fetching videos:', error));
-        }
-
-        function displayVideos(videos) {
-            videoList.innerHTML = ''; // Clear previous videos
-
-            videos.forEach(function (video) {
-                const listItem = document.createElement('li');
-                listItem.className = 'video-item';
-
-                // Create a video element
-                const videoElement = document.createElement('video');
-                videoElement.src = `${folderPath}${video.filename}`;
-                videoElement.controls = true;
-
-                // Set up click event to open modal
-                videoElement.onclick = function () {
-                    openModal(video.filename);
-                };
-
-                // Append the video element to the list item
-                listItem.appendChild(videoElement);
-
-                // Display video information
-                const infoParagraph = document.createElement('p');
-                infoParagraph.textContent = `Title: ${video.title}`;
-                listItem.appendChild(infoParagraph);
-
-                // Display tags
-                const tagsContainer = document.createElement('div');
-                tagsContainer.className = 'tags';
-                const tagsParagraph = document.createElement('p');
-                tagsParagraph.textContent = `Tags: ${video.tags.join(', ')}`;
-                tagsContainer.appendChild(tagsParagraph);
-                listItem.appendChild(tagsContainer);
-
-                // Append the list item to the video list
-                videoList.appendChild(listItem);
-            });
-        }
-
-        function populateTagFilter(videos) {
-            const allTags = videos.reduce((tags, video) => tags.concat(video.tags), []);
-            const uniqueTags = [...new Set(allTags)]; // Get unique tags
-
-            // Clear previous options
-            tagFilter.innerHTML = '<option value="all">All Tags</option>';
-
-            // Populate dropdown with tags
-            uniqueTags.forEach(tag => {
-                const option = document.createElement('option');
-                option.value = tag;
-                option.textContent = tag;
-                tagFilter.appendChild(option);
-            });
-        }
-
-        window.filterVideos = function () {
-            const selectedTag = tagFilter.value;
-            if (selectedTag === 'all') {
-                // If 'All Tags' selected, display all videos
-                displayVideos(allVideos);
-            } else {
-                // If a specific tag is selected, filter videos by tag
-                const filteredVideos = allVideos.filter(video => video.tags.includes(selectedTag));
-                displayVideos(filteredVideos);
-            }
-        };
-
-        function openModal(videoFilename) {
-            const videoPath = `${folderPath}${videoFilename}`;
-            modalVideo.src = videoPath;
-            videoModal.style.display = 'flex';
-        }
-
-        window.closeModal = function () {
-            modalVideo.pause();
-            videoModal.style.display = 'none';
-        };
-
-        // Close the modal if the user clicks outside of it
-        window.onclick = function (event) {
-            if (event.target === videoModal) {
-                closeModal();
-            }
-        };
-    };
+    // Your existing JavaScript code
 </script>
 
 </body>
