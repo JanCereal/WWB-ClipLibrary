@@ -205,13 +205,13 @@
                 // Display video information
                 const infoParagraph = document.createElement('p');
                 infoParagraph.textContent = `Title: ${video.title}`;
-                listItem.appendChild(infoParagraph);
 
                 // Display tags
                 const tagsContainer = document.createElement('div');
                 tagsContainer.className = 'tags';
                 const tagsParagraph = document.createElement('p');
                 tagsParagraph.textContent = `Tags: ${video.tags.join(', ')}`;
+                tagsContainer.appendChild(infoParagraph);
                 tagsContainer.appendChild(tagsParagraph);
                 listItem.appendChild(tagsContainer);
 
