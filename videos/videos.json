@@ -1,8 +1,23 @@
 [
     {
-        "filename": "test.mp4",
-        "title": "Introduction to Web Development",
-        "tags": ["tutorial", "web development"]
+        "filename": "grenades.mp4",
+        "title": "Kobe",
+        "tags": ["nade", "w"]
+    },
+    {
+        "filename": "CsHeadshotTBC.mp4",
+        "title": "To be continued",
+        "tags": ["multikill", "deagle", "headshot", "w"]
+    },
+    {
+        "filename": "GetDownMrPresident.mp4",
+        "title": "Get Down Mr President",
+        "tags": ["tutorial", "headshot", "l"]
+    },
+    {
+        "filename": "CsHeadshot.mp4",
+        "title": "Oof",
+        "tags": ["ak", "headshot", "w"]
     }
 
 ]
