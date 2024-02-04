@@ -12,7 +12,7 @@
     {
         "filename": "GetDownMrPresident.mp4",
         "title": "Get Down Mr President",
-        "tags": ["Headshot", "L", "CS:GO"]
+        "tags": ["Headshots", "L", "CS:GO"]
     },
     {
         "filename": "CsHeadshot.mp4",
@@ -27,7 +27,12 @@
     {
         "filename": "AceClutchFail.mp4",
         "title": "Ace Clutch Fail",
-        "tags": ["Ak-47", "Clutch", "L", "CS2"]
+        "tags": ["Ak-47", "Clutch", "L", "CS2", "Multikill"]
+    },
+    {
+        "filename": "Clicks.mp4",
+        "title": "Anubis Clicks",
+        "tags": ["Headshots", "Multikill" , "L", "CS2"]
     }
     
 ]
