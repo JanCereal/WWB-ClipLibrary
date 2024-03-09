@@ -14,10 +14,6 @@
             position: relative;
         }
 
-        ul {
-            color: red;
-        }
-
         #header {
             background-image: url(assets/DudeInWoods.jpg); /* Use DudeInWoods.jpg for the parallax effect */
             background-size: cover;
@@ -72,6 +68,7 @@
             gap: 10px; /* Adjust the gap between videos */
             margin: 20px;
             z-index: 1;
+            color: red;
         }
 
         .video-item {
@@ -179,7 +176,7 @@
 <script>
 
     VANTA.CELLS({
-        el: "#videoList",
+        el: "body",
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
