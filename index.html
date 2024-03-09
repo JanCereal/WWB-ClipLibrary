@@ -103,6 +103,7 @@
         .tags {
             margin-top: 5px; /* Adjust space between the video and tags */
             text-align: left;
+            padding-left: 10px;
         }
 
         .video-icon {
@@ -173,7 +174,22 @@
     </div>
 </div>
 
+<script src="three.r134.min.js"></script>
+<script src="assets/backgroundCells.js"></script>
 <script>
+
+    VANTA.CELLS({
+        el: "#your-element-selector",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        color1: 0x8c31,
+        color2: 0x827d62
+    })
+
     window.onload = function () {
         const videoList = document.getElementById('videoList');
         const tagFilter = document.getElementById('tagFilter');
