@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clip Library</title>
+<title>WWB Clip Library</title>
+<link rel="icon" type="image/png" href="assets/WWB_ServerIcon2.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -13,8 +14,9 @@ html,body{margin:0}
 body{background:var(--bg);color:var(--text);font:400 15px/1.5 Barlow,system-ui,sans-serif;min-height:100vh}
 h1,h2,.chip,button,.title{font-family:"Barlow Semi Condensed",system-ui,sans-serif}
 header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;padding:20px clamp(16px,4vw,40px);border-bottom:1px solid var(--edge)}
-h1{margin:0;font-size:30px;font-weight:700;letter-spacing:.01em}
-h1 small{font-weight:500;color:var(--dim);font-size:16px;margin-left:8px}
+h1{margin:0;font-size:30px;font-weight:700;letter-spacing:.01em;display:flex;align-items:center;gap:12px}
+h1 img{border-radius:8px;object-fit:cover;flex:none}
+h1 small{font-weight:500;color:var(--dim);font-size:16px}
 .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 input,select{background:var(--panel);border:1px solid var(--edge);color:var(--text);border-radius:6px;padding:9px 11px;font:inherit;min-width:0}
 input:focus-visible,button:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
@@ -57,7 +59,7 @@ dialog input{width:100%}
 </head>
 <body>
 <header>
-  <h1>Clip Library<small id="count"></small></h1>
+  <h1><img src="assets/WWB_ServerIcon2.png" alt="" width="44" height="44">WWB Clip Library<small id="count"></small></h1>
   <div class="bar">
     <input id="q" type="search" placeholder="Search clips" aria-label="Search clips">
     <button id="add" class="pri" hidden>Upload clip</button>
@@ -118,7 +120,7 @@ if(!CFG.owner && location.hostname.endsWith(".github.io")){
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let clips = [], token = "", user = "", editing = null, selGame = "", selTags = new Set();
+let loadErr = "", clips = [], token = "", user = "", editing = null, selGame = "", selTags = new Set();
 const store = { get(k){try{return sessionStorage.getItem(k)||""}catch(e){return ""}}, set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}, del(k){try{sessionStorage.removeItem(k)}catch(e){}} };
 
 function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",4500)}
@@ -148,6 +150,7 @@ async function put(path, content, message){
   }
 }
 function saveClips(message){
+  if(loadErr) return Promise.reject(new Error("clips.json could not be read, so saving is blocked to protect your data. Fix the file first."));
   const data = clips.map(({preview,...c})=>c);
   return put(CFG.dataFile, b64text(JSON.stringify(data,null,2)), message);
 }
@@ -157,8 +160,15 @@ async function load(){
   try{
     const r = await fetch(CFG.dataFile + "?t=" + Date.now());
     clips = r.ok ? await r.json() : [];
-  }catch(e){ clips = []; }
+    loadErr = "";
+  }catch(e){ clips = []; loadErr = e.message; }
   render();
+}
+/* Search: words under 3 letters must match a whole word or tag; longer words match the start of one */
+function matches(c, w){
+  const toks = [c.title, c.game||"", ...(c.tags||[])].join(" ").toLowerCase().split(/\s+/)
+    .flatMap(x => [x, ...x.split(/[^\p{L}\p{N}]+/u)]).filter(Boolean);
+  return w.length < 3 ? toks.includes(w) : toks.some(t => t.startsWith(w));
 }
 function render(){
   const games = [...new Set(clips.map(c=>c.game).filter(Boolean))].sort();
@@ -175,9 +185,10 @@ function render(){
   const list = clips.filter(c =>
     (!selGame || c.game===selGame) &&
     [...selTags].every(t => (c.tags||[]).includes(t)) &&
-    words.every(w => (c.title+" "+(c.game||"")+" "+(c.tags||[]).join(" ")).toLowerCase().includes(w)));
-  $("count").textContent = `${list.length} of ${clips.length}`;
-  $("empty").hidden = list.length>0;
+    words.every(w => matches(c,w)));
+  $("count").textContent = list.length;
+  $("empty").hidden = list.length>0 && !loadErr;
+  $("empty").textContent = loadErr ? `clips.json could not be read (${loadErr}). Check it for a missing comma or bracket.` : "No clips match. Clear a filter or log in to upload one.";
   $("grid").innerHTML = list.map(c => {
     const src = c.preview || c.src;
     return `<article class="card" data-id="${esc(c.id)}">
