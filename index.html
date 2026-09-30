@@ -130,14 +130,22 @@ async function gh(path, opts={}){
   return r;
 }
 async function fileSha(path){
-  const r = await gh(`/contents/${path}?ref=${CFG.branch}`);
+  const r = await gh(`/contents/${path}?ref=${CFG.branch}&_=${Date.now()}`, {cache:"no-store"});
   return r.status===404 ? undefined : (await r.json()).sha;
 }
 const b64text = s => btoa(unescape(encodeURIComponent(s)));
 const fileB64 = f => new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});
 async function put(path, content, message){
-  const sha = await fileSha(path);
-  await gh(`/contents/${path}`, {method:"PUT", body:JSON.stringify({message, content, branch:CFG.branch, sha})});
+  for(let i=0;i<3;i++){
+    try{
+      const sha = await fileSha(path);
+      await gh(`/contents/${path}`, {method:"PUT", body:JSON.stringify({message, content, branch:CFG.branch, sha})});
+      return;
+    }catch(e){
+      if(i===2 || !/does not match|sha/i.test(e.message)) throw e;
+      await new Promise(r=>setTimeout(r,800));
+    }
+  }
 }
 function saveClips(message){
   const data = clips.map(({preview,...c})=>c);
