@@ -1,313 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forest Video Library</title>
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" sizes="170x169">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <style>
-        body, html {
-
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            height: 100%;
-        }
-
-        body {
-            min-height: 100%;
-        }
-
-        #header {
-            background-image: url(assets/DudeInWoods.jpg); /* Use DudeInWoods.jpg for the parallax effect */
-            background-size: cover;
-            background-attachment: fixed; /* Ensure the background image stays fixed */
-            background-position: center;
-            height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff; /* White text color */
-            position: relative;
-            z-index: 1;
-        }
-
-        #header:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        #header h1 {
-            margin: 0;
-            font-size: 2em;
-            position: relative;
-            z-index: 1;
-        }
-
-        #filterContainer {
-            margin: 20px 0 20px 20px; /* Add space above and to the left of the filter */
-            padding-left: 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        #tagFilter {
-            background-color: #c0dfab; /* Lighter green dropdown background */
-            color: #3b593a; /* Dark green dropdown text color */
-            border: 1px solid #3b593a; /* Dark green dropdown border */
-            border-radius: 5px;
-            padding: 5px;
-            z-index: 1;
-        }
-
-        #videoList {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px; /* Adjust the gap between videos */
-            margin: 20px;
-            z-index: 1;
-            background-color: transparent;
-        }
-
-        .video-item {
-            width: 400px; /* Set a static width for the video boxes */
-            height: 300px; /* Adjusted height to show more content */
-            overflow: hidden; /* Hide any content that overflows the box */
-            cursor: pointer;
-            text-align: center;
-            background-color: #d3e0cf; /* Light green video background */
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
-            display: flex;
-            flex-direction: column; /* Align content in a column layout */
-        }
-
-        .video-item video {
-            flex-grow: 1; /* Make the video take up remaining space in the container */
-            width: 100%; /* Make the video fill its container */
-            height: 100%; /* Make the video fill its container */
-            object-fit: cover; /* Maintain aspect ratio and cover the entire container */
-        }
-
-        .video-info {
-            background-color: #c0dfab; /* Lighter green background for the description */
-            border-top: 1px solid #3b593a; /* Dark green border at the top of the description */
-            border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
-            margin-bottom: 0; /* Remove bottom margin */
-        }
-
-        .tags {
-            margin-top: 5px; /* Adjust space between the video and tags */
-            text-align: left;
-            padding-left: 10px;
-        }
-
-        .video-icon {
-            font-size: 24px;
-            color: #6b8c61; /* Olive green icon color */
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            max-width: 400px;
-            width: 100%;
-            max-height: 300px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Shadow for the modal */
-        }
-
-        .modal-video {
-            width: 100%;
-            height: auto;
-            max-height: 100%;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clip Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#191c2b;--panel:#242a40;--line:#36406000;--edge:#39425f;--text:#e9ecf5;--dim:#9aa3bf;--acc:#ffb547;--accInk:#2a1c00;--bad:#ff7a7a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:400 15px/1.5 Barlow,system-ui,sans-serif;min-height:100vh}
+h1,h2,.chip,button,.title{font-family:"Barlow Semi Condensed",system-ui,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;padding:20px clamp(16px,4vw,40px);border-bottom:1px solid var(--edge)}
+h1{margin:0;font-size:30px;font-weight:700;letter-spacing:.01em}
+h1 small{font-weight:500;color:var(--dim);font-size:16px;margin-left:8px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+input,select{background:var(--panel);border:1px solid var(--edge);color:var(--text);border-radius:6px;padding:9px 11px;font:inherit;min-width:0}
+input:focus-visible,button:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button{background:var(--panel);color:var(--text);border:1px solid var(--edge);border-radius:6px;padding:8px 14px;font-size:15px;font-weight:600;cursor:pointer}
+button:hover{border-color:var(--acc)}
+button.pri{background:var(--acc);color:var(--accInk);border-color:var(--acc)}
+button.bad{color:var(--bad)}
+main{padding:20px clamp(16px,4vw,40px) 60px}
+.filters{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row b{color:var(--dim);font-weight:500;min-width:52px}
+.chip{border:1px solid var(--edge);background:transparent;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:500;color:var(--dim)}
+.chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--accInk)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.card{background:var(--panel);border-radius:8px;overflow:hidden;border:1px solid var(--edge);display:flex;flex-direction:column}
+.thumb{position:relative;aspect-ratio:16/9;background:#0e1019;cursor:pointer}
+.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .pp,.thumb .fs{position:absolute;bottom:8px;background:rgba(14,16,25,.78);padding:4px 10px;font-size:13px}
+.thumb .pp{left:8px}.thumb .fs{right:8px}
+.info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px}
+.title{font-size:19px;font-weight:600;line-height:1.2;margin:0}
+.game{color:var(--acc);font-size:14px;font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:13px;color:var(--dim);background:#1b2033;border-radius:4px;padding:1px 7px}
+.edit{align-self:flex-start;font-size:13px;padding:3px 10px;margin-top:2px}
+.empty{color:var(--dim);padding:60px 0;text-align:center}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--edge);border-radius:10px;padding:22px;width:min(480px,92vw)}
+dialog::backdrop{background:rgba(8,9,15,.8)}
+dialog h2{margin:0 0 14px;font-size:24px}
+label{display:block;margin:10px 0 4px;color:var(--dim);font-size:14px}
+dialog input{width:100%}
+.acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.note{color:var(--dim);font-size:13px;margin:8px 0 0}
+#viewer{width:min(1100px,96vw);padding:14px;background:#0e1019}
+#viewer video{width:100%;max-height:80vh;display:block;background:#000}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 16px;border-radius:6px;font-weight:500;display:none;max-width:90vw;z-index:9}
+.sr{position:absolute;left:-9999px}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
 </head>
-
 <body>
+<header>
+  <h1>Clip Library<small id="count"></small></h1>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search clips" aria-label="Search clips">
+    <button id="add" class="pri" hidden>Upload clip</button>
+    <span id="who" class="tag" hidden></span>
+    <button id="login">Log in</button>
+  </div>
+</header>
+<main>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>No clips match. Clear a filter or log in to upload one.</p>
+</main>
 
-<div id="header">
-    <h1>WWB ClipLib</h1>
-</div>
+<dialog id="loginDlg">
+  <h2>Log in</h2>
+  <p class="note" style="margin-top:0">Only people with write access to this GitHub repository can upload or edit. Paste a fine-grained personal access token with <b>Contents: Read and write</b> for this repo.</p>
+  <label for="tok">GitHub token</label>
+  <input id="tok" type="password" autocomplete="off" placeholder="github_pat_…">
+  <p class="note" id="loginErr" style="color:var(--bad)"></p>
+  <div class="acts"><button data-close>Cancel</button><button id="loginGo" class="pri">Log in</button></div>
+</dialog>
 
-<div id="filterContainer">
-    <label for="tagFilter" style="color: white;">Filter by Tag:</label>
-    <select id="tagFilter" onchange="filterVideos()">
-        <option value="all">All Tags</option>
-        <!-- Add options dynamically based on available tags -->
-    </select>
-</div>
+<dialog id="formDlg">
+  <h2 id="formTitle">Upload clip</h2>
+  <div id="fileWrap">
+    <label for="file">Video file (mp4 or webm, under 50 MB)</label>
+    <input id="file" type="file" accept="video/mp4,video/webm">
+    <label for="url">Or a direct video link</label>
+    <input id="url" type="url" placeholder="https://…/clip.mp4">
+  </div>
+  <label for="fTitle">Title</label><input id="fTitle">
+  <label for="fGame">Game</label><input id="fGame" list="games">
+  <datalist id="games"></datalist>
+  <label for="fTags">Tags (comma separated, e.g. ace, clutch, funny)</label><input id="fTags">
+  <p class="note" id="formErr" style="color:var(--bad)"></p>
+  <div class="acts">
+    <button id="del" class="bad" hidden>Delete clip</button>
+    <button data-close>Cancel</button><button id="save" class="pri">Save</button>
+  </div>
+</dialog>
 
-<ul id="videoList"></ul>
+<dialog id="viewer">
+  <div class="acts" style="margin:0 0 10px;justify-content:space-between;align-items:center">
+    <span class="title" id="vTitle"></span>
+    <span><button id="vFs">Fullscreen</button> <button data-close>Close</button></span>
+  </div>
+  <video id="vVid" controls playsinline></video>
+</dialog>
+<div id="toast" role="status"></div>
 
-<!-- Modal for displaying videos -->
-<div id="videoModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <video id="modalVideo" controls class="modal-video"></video>
-    </div>
-</div>
-
-<script src="assets/backgroundFunc.js"></script>
-<script src="assets/backgroundCells.js"></script>
 <script>
+/* ---- Config: auto-detects owner/repo on GitHub Pages; edit if you use a custom domain ---- */
+const CFG = { owner:"", repo:"", branch:"main", dataFile:"clips.json", clipDir:"clips" };
+if(!CFG.owner && location.hostname.endsWith(".github.io")){
+  CFG.owner = location.hostname.split(".")[0];
+  CFG.repo = location.pathname.split("/")[1] || (CFG.owner + ".github.io");
+}
 
-    VANTA.CELLS({
-        el: "body",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        color1: 0x44754c,
-        color2: 0x6e6e4b,
-        size: 0.20,
-        speed: 0.00
-    })
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let clips = [], token = "", user = "", editing = null, selGame = "", selTags = new Set();
+const store = { get(k){try{return sessionStorage.getItem(k)||""}catch(e){return ""}}, set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}, del(k){try{sessionStorage.removeItem(k)}catch(e){}} };
 
+function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",4500)}
 
-    window.onload = function () {
-        const videoList = document.getElementById('videoList');
-        const tagFilter = document.getElementById('tagFilter');
-        const videoModal = document.getElementById('videoModal');
-        const modalVideo = document.getElementById('modalVideo');
+/* ---- GitHub API ---- */
+async function gh(path, opts={}){
+  const r = await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}${path}`, {...opts, headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,...(opts.headers||{})}});
+  if(!r.ok && r.status!==404) throw new Error((await r.json().catch(()=>({}))).message || r.statusText);
+  return r;
+}
+async function fileSha(path){
+  const r = await gh(`/contents/${path}?ref=${CFG.branch}`);
+  return r.status===404 ? undefined : (await r.json()).sha;
+}
+const b64text = s => btoa(unescape(encodeURIComponent(s)));
+const fileB64 = f => new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});
+async function put(path, content, message){
+  const sha = await fileSha(path);
+  await gh(`/contents/${path}`, {method:"PUT", body:JSON.stringify({message, content, branch:CFG.branch, sha})});
+}
+function saveClips(message){
+  const data = clips.map(({preview,...c})=>c);
+  return put(CFG.dataFile, b64text(JSON.stringify(data,null,2)), message);
+}
 
-        // Folder path where videos are stored
-        const folderPath = 'videos/';
+/* ---- Load + render ---- */
+async function load(){
+  try{
+    const r = await fetch(CFG.dataFile + "?t=" + Date.now());
+    clips = r.ok ? await r.json() : [];
+  }catch(e){ clips = []; }
+  render();
+}
+function render(){
+  const games = [...new Set(clips.map(c=>c.game).filter(Boolean))].sort();
+  const tags = [...new Set(clips.flatMap(c=>c.tags||[]))].sort();
+  const chip = (t,on,attr) => `<button class="chip" aria-pressed="${on}" ${attr}="${esc(t)}">${esc(t)}</button>`;
+  $("filters").innerHTML =
+    (games.length ? `<div class="row"><b>Game</b>${games.map(g=>chip(g,g===selGame,"data-game")).join("")}</div>` : "") +
+    (tags.length ? `<div class="row"><b>Tags</b>${tags.map(t=>chip(t,selTags.has(t),"data-tag")).join("")}</div>` : "");
+  $("games").innerHTML = games.map(g=>`<option value="${esc(g)}">`).join("");
 
-        // Array to store all videos
-        let allVideos = [];
+  const q = $("q").value.trim().toLowerCase();
+  const list = clips.filter(c =>
+    (!selGame || c.game===selGame) &&
+    [...selTags].every(t => (c.tags||[]).includes(t)) &&
+    (!q || (c.title+" "+(c.game||"")+" "+(c.tags||[]).join(" ")).toLowerCase().includes(q)));
+  $("count").textContent = `${list.length} of ${clips.length}`;
+  $("empty").hidden = list.length>0;
+  $("grid").innerHTML = list.map(c => {
+    const src = c.preview || c.src;
+    return `<article class="card" data-id="${esc(c.id)}">
+      <div class="thumb">
+        <video src="${esc(src)}#t=0.5" muted loop playsinline preload="metadata"></video>
+        <button class="pp" aria-label="Play preview of ${esc(c.title)}">Play</button>
+        <button class="fs" aria-label="Open ${esc(c.title)} fullscreen">Fullscreen</button>
+      </div>
+      <div class="info">
+        <h3 class="title">${esc(c.title)}</h3>
+        ${c.game?`<span class="game">${esc(c.game)}</span>`:""}
+        <div class="tags">${(c.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+        ${token?`<button class="edit" data-edit>Edit tags</button>`:""}
+      </div></article>`;
+  }).join("");
+}
 
-        // Fetch video files from the server
-        fetchVideos();
+/* ---- Grid interactions ---- */
+$("filters").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.game!==undefined) selGame = selGame===b.dataset.game ? "" : b.dataset.game;
+  if(b.dataset.tag!==undefined) selTags.has(b.dataset.tag) ? selTags.delete(b.dataset.tag) : selTags.add(b.dataset.tag);
+  render();
+});
+$("q").addEventListener("input", render);
 
-        function fetchVideos() {
-            fetch(`${folderPath}videos.json`)
-                .then(response => response.json())
-                .then(videos => {
-                    allVideos = videos; // Store all videos for reference
-                    displayVideos(videos);
-                    populateTagFilter(videos);
-                })
-                .catch(error => console.error('Error fetching videos:', error));
-        }
+function togglePreview(card){
+  const v = card.querySelector("video"), pp = card.querySelector(".pp");
+  document.querySelectorAll(".card video").forEach(o=>{ if(o!==v && !o.paused){o.pause();o.closest(".card").querySelector(".pp").textContent="Play"} });
+  if(v.paused){ v.play().catch(()=>{}); pp.textContent="Pause"; } else { v.pause(); pp.textContent="Play"; }
+}
+$("grid").addEventListener("click", e=>{
+  const card = e.target.closest(".card"); if(!card) return;
+  const clip = clips.find(c=>c.id===card.dataset.id);
+  if(e.target.closest("[data-edit]")) return openForm(clip);
+  if(e.target.closest(".fs")) return openViewer(clip, true);
+  if(e.target.closest(".thumb")) togglePreview(card);
+});
+$("grid").addEventListener("dblclick", e=>{
+  const card = e.target.closest(".thumb"); if(!card) return;
+  openViewer(clips.find(c=>c.id===card.parentElement.dataset.id), true);
+});
+$("grid").addEventListener("mouseover", e=>{
+  const t = e.target.closest(".thumb"); if(!t) return;
+  const v = t.querySelector("video"); if(v.paused && !t.dataset.hover){ t.dataset.hover=1; v.play().catch(()=>{}); }
+});
+$("grid").addEventListener("mouseout", e=>{
+  const t = e.target.closest(".thumb"); if(!t || t.contains(e.relatedTarget)) return;
+  delete t.dataset.hover;
+  const v = t.querySelector("video");
+  if(t.querySelector(".pp").textContent==="Play"){ v.pause(); v.currentTime=0.5; }
+});
 
-        function displayVideos(videos) {
-            videoList.innerHTML = ''; // Clear previous videos
+/* ---- Viewer / fullscreen ---- */
+function openViewer(c, goFs){
+  document.querySelectorAll(".card video").forEach(v=>v.pause());
+  $("vTitle").textContent = c.title;
+  $("vVid").src = c.preview || c.src;
+  $("viewer").showModal();
+  $("vVid").play().catch(()=>{});
+  if(goFs) $("vVid").requestFullscreen?.().catch(()=>{});
+}
+$("vFs").onclick = () => $("vVid").requestFullscreen?.();
+$("viewer").addEventListener("close", ()=>{ $("vVid").pause(); $("vVid").removeAttribute("src"); });
+document.addEventListener("click", e=>{ if(e.target.matches("[data-close]")) e.target.closest("dialog").close(); });
 
-            videos.forEach(function (video) {
-                const listItem = document.createElement('li');
-                listItem.className = 'video-item';
+/* ---- Login ---- */
+async function doLogin(t){
+  if(!CFG.owner) throw new Error("Set owner and repo in CFG at the top of the script.");
+  token = t;
+  const r = await gh("");
+  const repo = await r.json();
+  if(r.status===404 || !repo.permissions?.push){ token=""; throw new Error("This token has no write access to " + CFG.owner + "/" + CFG.repo + "."); }
+  user = "Signed in";
+  store.set("clipTok", t);
+  $("add").hidden = false; $("who").hidden = false; $("who").textContent = user; $("login").textContent = "Log out";
+  render();
+}
+function logout(){
+  token=""; store.del("clipTok");
+  $("add").hidden = true; $("who").hidden = true; $("login").textContent = "Log in";
+  render();
+}
+$("login").onclick = () => token ? logout() : ($("loginErr").textContent="", $("loginDlg").showModal());
+$("loginGo").onclick = async () => {
+  $("loginErr").textContent = "";
+  try{ await doLogin($("tok").value.trim()); $("tok").value=""; $("loginDlg").close(); toast("Logged in"); }
+  catch(e){ $("loginErr").textContent = e.message; }
+};
 
-                // Create a video element
-                const videoElement = document.createElement('video');
-                videoElement.src = `${folderPath}${video.filename}`;
-                videoElement.controls = true;
+/* ---- Upload / edit ---- */
+function openForm(c){
+  editing = c || null;
+  $("formTitle").textContent = c ? "Edit clip" : "Upload clip";
+  $("fileWrap").hidden = !!c; $("del").hidden = !c;
+  $("file").value=""; $("url").value="";
+  $("fTitle").value = c?.title || ""; $("fGame").value = c?.game || ""; $("fTags").value = (c?.tags||[]).join(", ");
+  $("formErr").textContent = "";
+  $("formDlg").showModal();
+}
+$("add").onclick = () => openForm(null);
+const parseTags = s => [...new Set(s.split(",").map(t=>t.trim().toLowerCase()).filter(Boolean))];
 
-                // Set up click event to open modal
-                videoElement.onclick = function () {
-                    openModal(video.filename);
-                };
+$("save").onclick = async () => {
+  const btn = $("save"); $("formErr").textContent = "";
+  const meta = { title:$("fTitle").value.trim(), game:$("fGame").value.trim(), tags:parseTags($("fTags").value) };
+  try{
+    btn.disabled = true;
+    if(editing){
+      if(!meta.title) throw new Error("Add a title.");
+      Object.assign(editing, meta);
+      btn.textContent = "Saving…";
+      await saveClips(`Edit clip: ${meta.title}`);
+    }else{
+      const f = $("file").files[0], url = $("url").value.trim();
+      if(!f && !url) throw new Error("Choose a video file or paste a link.");
+      if(!meta.title) meta.title = f ? f.name.replace(/\.[^.]+$/,"") : "Untitled clip";
+      if(f && f.size > 50*1024*1024) throw new Error("File is over 50 MB. Compress it or host it elsewhere and paste the link.");
+      const id = Date.now().toString(36);
+      let clip = { id, ...meta, added:new Date().toISOString().slice(0,10) };
+      if(f){
+        btn.textContent = "Uploading…";
+        const name = `${id}-${f.name.replace(/[^\w.-]+/g,"_")}`;
+        await put(`${CFG.clipDir}/${name}`, await fileB64(f), `Add clip file: ${name}`);
+        clip.src = `${CFG.clipDir}/${name}`; clip.preview = URL.createObjectURL(f);
+      }else clip.src = url;
+      clips.unshift(clip);
+      btn.textContent = "Saving…";
+      await saveClips(`Add clip: ${meta.title}`);
+    }
+    $("formDlg").close(); render();
+    toast("Saved. The site updates for everyone in about a minute.");
+  }catch(e){ $("formErr").textContent = e.message; if(editing===null && clips[0] && !clips[0].saved) load(); }
+  finally{ btn.disabled=false; btn.textContent="Save"; }
+};
+$("del").onclick = async () => {
+  if(!editing || !confirm(`Delete "${editing.title}"?`)) return;
+  try{
+    if(editing.src.startsWith(CFG.clipDir + "/")){
+      const sha = await fileSha(editing.src);
+      if(sha) await gh(`/contents/${editing.src}`, {method:"DELETE", body:JSON.stringify({message:"Delete clip file", sha, branch:CFG.branch})});
+    }
+    clips = clips.filter(c=>c!==editing);
+    await saveClips(`Delete clip: ${editing.title}`);
+    $("formDlg").close(); render(); toast("Clip deleted.");
+  }catch(e){ $("formErr").textContent = e.message; }
+};
 
-                // Append the video element to the list item
-                listItem.appendChild(videoElement);
-
-                // Display video information
-                const infoParagraph = document.createElement('p');
-                infoParagraph.textContent = `Title: ${video.title}`;
-
-                // Display tags
-                const tagsContainer = document.createElement('div');
-                tagsContainer.className = 'tags';
-                const tagsParagraph = document.createElement('p');
-                tagsParagraph.textContent = `Tags: ${video.tags.join(', ')}`;
-                tagsContainer.appendChild(infoParagraph);
-                tagsContainer.appendChild(tagsParagraph);
-                listItem.appendChild(tagsContainer);
-
-                // Append the list item to the video list
-                videoList.appendChild(listItem);
-            });
-        }
-
-        function populateTagFilter(videos) {
-            const allTags = videos.reduce((tags, video) => tags.concat(video.tags), []);
-            const uniqueTags = [...new Set(allTags)]; // Get unique tags
-
-            // Clear previous options
-            tagFilter.innerHTML = '<option value="all">All Tags</option>';
-
-            // Populate dropdown with tags
-            uniqueTags.forEach(tag => {
-                const option = document.createElement('option');
-                option.value = tag;
-                option.textContent = tag;
-                tagFilter.appendChild(option);
-            });
-        }
-
-        window.filterVideos = function () {
-            const selectedTag = tagFilter.value;
-            if (selectedTag === 'all') {
-                // If 'All Tags' selected, display all videos
-                displayVideos(allVideos);
-            } else {
-                // If a specific tag is selected, filter videos by tag
-                const filteredVideos = allVideos.filter(video => video.tags.includes(selectedTag));
-                displayVideos(filteredVideos);
-            }
-        };
-
-        function openModal(videoFilename) {
-            const videoPath = `${folderPath}${videoFilename}`;
-            modalVideo.src = videoPath;
-            videoModal.style.display = 'flex';
-        }
-
-        window.closeModal = function () {
-            modalVideo.pause();
-            videoModal.style.display = 'none';
-        };
-
-        // Close the modal if the user clicks outside of it
-        window.onclick = function (event) {
-            if (event.target === videoModal) {
-                closeModal();
-            }
-        };
-    };
+/* ---- Start ---- */
+load();
+const saved = store.get("clipTok");
+if(saved) doLogin(saved).catch(()=>logout());
 </script>
-
 </body>
 </html>

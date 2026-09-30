@@ -1,0 +1,34 @@
+[
+  {
+    "id": "ex1",
+    "title": "Five kills in one round",
+    "game": "Valorant",
+    "tags": ["ace", "headshots", "ranked"],
+    "src": "clips/1-valorant-ace.mp4",
+    "added": "2026-09-01"
+  },
+  {
+    "id": "ex2",
+    "title": "Aerial goal from midfield",
+    "game": "Rocket League",
+    "tags": ["goal", "aerial", "highlight"],
+    "src": "clips/2-rocketleague-goal.mp4",
+    "added": "2026-09-05"
+  },
+  {
+    "id": "ex3",
+    "title": "Fell into lava with full diamond gear",
+    "game": "Minecraft",
+    "tags": ["fail", "funny"],
+    "src": "clips/3-minecraft-fail.mp4",
+    "added": "2026-09-10"
+  },
+  {
+    "id": "ex4",
+    "title": "1v3 clutch on match point",
+    "game": "Valorant",
+    "tags": ["clutch", "ranked", "highlight"],
+    "src": "clips/4-valorant-clutch.mp4",
+    "added": "2026-09-12"
+  }
+]
