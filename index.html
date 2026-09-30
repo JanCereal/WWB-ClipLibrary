@@ -32,8 +32,8 @@ main{padding:20px clamp(16px,4vw,40px) 60px}
 .card{background:var(--panel);border-radius:8px;overflow:hidden;border:1px solid var(--edge);display:flex;flex-direction:column}
 .thumb{position:relative;aspect-ratio:16/9;background:#0e1019;cursor:pointer}
 .thumb video{width:100%;height:100%;object-fit:cover;display:block}
-.thumb .pp,.thumb .fs{position:absolute;bottom:8px;background:rgba(14,16,25,.78);padding:4px 10px;font-size:13px}
-.thumb .pp{left:8px}.thumb .fs{right:8px}
+.thumb .fs{position:absolute;bottom:8px;background:rgba(14,16,25,.78);padding:4px 10px;font-size:13px}
+.thumb .fs{right:8px}
 .info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px}
 .title{font-size:19px;font-weight:600;line-height:1.2;margin:0}
 .game{color:var(--acc);font-size:14px;font-weight:500}
@@ -83,10 +83,10 @@ dialog input{width:100%}
 <dialog id="formDlg">
   <h2 id="formTitle">Upload clip</h2>
   <div id="fileWrap">
-    <label for="file">Video file (mp4 or webm, under 50 MB)</label>
+    <label for="file">Video file (mp4 or webm, up to 25 MB)</label>
     <input id="file" type="file" accept="video/mp4,video/webm">
-    <label for="url">Or a direct video link</label>
-    <input id="url" type="url" placeholder="https://…/clip.mp4">
+    <label for="url">Or a video link, or a path like clips/name.mp4 for a file you pushed with git</label>
+    <input id="url" placeholder="https://…/clip.mp4 or clips/name.mp4">
   </div>
   <label for="fTitle">Title</label><input id="fTitle">
   <label for="fGame">Game</label><input id="fGame" list="games">
@@ -142,8 +142,8 @@ async function put(path, content, message){
       await gh(`/contents/${path}`, {method:"PUT", body:JSON.stringify({message, content, branch:CFG.branch, sha})});
       return;
     }catch(e){
-      if(i===2 || !/does not match|sha/i.test(e.message)) throw e;
-      await new Promise(r=>setTimeout(r,800));
+      if(i===2 || !/does not match|sha|timed out|try again|timeout/i.test(e.message)) throw e;
+      await new Promise(r=>setTimeout(r,2500));
     }
   }
 }
@@ -162,18 +162,20 @@ async function load(){
 }
 function render(){
   const games = [...new Set(clips.map(c=>c.game).filter(Boolean))].sort();
-  const tags = [...new Set(clips.flatMap(c=>c.tags||[]))].sort();
+  const pool = clips.filter(c=>!selGame || c.game===selGame);
+  const tags = [...new Set(pool.flatMap(c=>c.tags||[]))].sort();
+  [...selTags].forEach(t=>{ if(!tags.includes(t)) selTags.delete(t); });
   const chip = (t,on,attr) => `<button class="chip" aria-pressed="${on}" ${attr}="${esc(t)}">${esc(t)}</button>`;
   $("filters").innerHTML =
     (games.length ? `<div class="row"><b>Game</b>${games.map(g=>chip(g,g===selGame,"data-game")).join("")}</div>` : "") +
     (tags.length ? `<div class="row"><b>Tags</b>${tags.map(t=>chip(t,selTags.has(t),"data-tag")).join("")}</div>` : "");
   $("games").innerHTML = games.map(g=>`<option value="${esc(g)}">`).join("");
 
-  const q = $("q").value.trim().toLowerCase();
+  const words = $("q").value.toLowerCase().split(/\s+/).filter(Boolean);
   const list = clips.filter(c =>
     (!selGame || c.game===selGame) &&
     [...selTags].every(t => (c.tags||[]).includes(t)) &&
-    (!q || (c.title+" "+(c.game||"")+" "+(c.tags||[]).join(" ")).toLowerCase().includes(q)));
+    words.every(w => (c.title+" "+(c.game||"")+" "+(c.tags||[]).join(" ")).toLowerCase().includes(w)));
   $("count").textContent = `${list.length} of ${clips.length}`;
   $("empty").hidden = list.length>0;
   $("grid").innerHTML = list.map(c => {
@@ -181,7 +183,6 @@ function render(){
     return `<article class="card" data-id="${esc(c.id)}">
       <div class="thumb">
         <video src="${esc(src)}#t=0.5" muted loop playsinline preload="metadata"></video>
-        <button class="pp" aria-label="Play preview of ${esc(c.title)}">Play</button>
         <button class="fs" aria-label="Open ${esc(c.title)} fullscreen">Fullscreen</button>
       </div>
       <div class="info">
@@ -202,31 +203,20 @@ $("filters").addEventListener("click", e=>{
 });
 $("q").addEventListener("input", render);
 
-function togglePreview(card){
-  const v = card.querySelector("video"), pp = card.querySelector(".pp");
-  document.querySelectorAll(".card video").forEach(o=>{ if(o!==v && !o.paused){o.pause();o.closest(".card").querySelector(".pp").textContent="Play"} });
-  if(v.paused){ v.play().catch(()=>{}); pp.textContent="Pause"; } else { v.pause(); pp.textContent="Play"; }
-}
 $("grid").addEventListener("click", e=>{
   const card = e.target.closest(".card"); if(!card) return;
   const clip = clips.find(c=>c.id===card.dataset.id);
   if(e.target.closest("[data-edit]")) return openForm(clip);
   if(e.target.closest(".fs")) return openViewer(clip, true);
-  if(e.target.closest(".thumb")) togglePreview(card);
-});
-$("grid").addEventListener("dblclick", e=>{
-  const card = e.target.closest(".thumb"); if(!card) return;
-  openViewer(clips.find(c=>c.id===card.parentElement.dataset.id), true);
+  if(e.target.closest(".thumb")) openViewer(clip, false);
 });
 $("grid").addEventListener("mouseover", e=>{
-  const t = e.target.closest(".thumb"); if(!t) return;
-  const v = t.querySelector("video"); if(v.paused && !t.dataset.hover){ t.dataset.hover=1; v.play().catch(()=>{}); }
+  const t = e.target.closest(".thumb"); if(!t || t.contains(e.relatedTarget)) return;
+  t.querySelector("video").play().catch(()=>{});
 });
 $("grid").addEventListener("mouseout", e=>{
   const t = e.target.closest(".thumb"); if(!t || t.contains(e.relatedTarget)) return;
-  delete t.dataset.hover;
-  const v = t.querySelector("video");
-  if(t.querySelector(".pp").textContent==="Play"){ v.pause(); v.currentTime=0.5; }
+  const v = t.querySelector("video"); v.pause(); v.currentTime = 0.5;
 });
 
 /* ---- Viewer / fullscreen ---- */
@@ -293,13 +283,13 @@ $("save").onclick = async () => {
       const f = $("file").files[0], url = $("url").value.trim();
       if(!f && !url) throw new Error("Choose a video file or paste a link.");
       if(!meta.title) meta.title = f ? f.name.replace(/\.[^.]+$/,"") : "Untitled clip";
-      if(f && f.size > 50*1024*1024) throw new Error("File is over 50 MB. Compress it or host it elsewhere and paste the link.");
+      if(f && f.size > 25*1024*1024) throw new Error("GitHub's web API can't reliably take files over about 25 MB. Compress the clip, or push it into the clips folder with git and enter its path (clips/name.mp4) in the link field.");
       const id = Date.now().toString(36);
       let clip = { id, ...meta, added:new Date().toISOString().slice(0,10) };
       if(f){
-        btn.textContent = "Uploading…";
+        btn.textContent = "Uploading… (large files can take a minute)";
         const name = `${id}-${f.name.replace(/[^\w.-]+/g,"_")}`;
-        await put(`${CFG.clipDir}/${name}`, await fileB64(f), `Add clip file: ${name}`);
+        await put(`${CFG.clipDir}/${name}`, await fileB64(f), `Add clip file: ${name}`).catch(e=>{throw new Error(/too large/i.test(e.message)?"GitHub refused the file as too large. Compress it below 25 MB or push it with git (see the link field).":e.message)});
         clip.src = `${CFG.clipDir}/${name}`; clip.preview = URL.createObjectURL(f);
       }else clip.src = url;
       clips.unshift(clip);
