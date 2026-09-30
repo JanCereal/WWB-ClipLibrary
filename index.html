@@ -83,10 +83,10 @@ dialog input{width:100%}
 <dialog id="formDlg">
   <h2 id="formTitle">Upload clip</h2>
   <div id="fileWrap">
-    <label for="file">Video file (mp4 or webm, under 50 MB)</label>
+    <label for="file">Video file (mp4 or webm, up to 25 MB)</label>
     <input id="file" type="file" accept="video/mp4,video/webm">
-    <label for="url">Or a direct video link</label>
-    <input id="url" type="url" placeholder="https://…/clip.mp4">
+    <label for="url">Or a video link, or a path like clips/name.mp4 for a file you pushed with git</label>
+    <input id="url" placeholder="https://…/clip.mp4 or clips/name.mp4">
   </div>
   <label for="fTitle">Title</label><input id="fTitle">
   <label for="fGame">Game</label><input id="fGame" list="games">
@@ -142,8 +142,8 @@ async function put(path, content, message){
       await gh(`/contents/${path}`, {method:"PUT", body:JSON.stringify({message, content, branch:CFG.branch, sha})});
       return;
     }catch(e){
-      if(i===2 || !/does not match|sha/i.test(e.message)) throw e;
-      await new Promise(r=>setTimeout(r,800));
+      if(i===2 || !/does not match|sha|timed out|try again|timeout/i.test(e.message)) throw e;
+      await new Promise(r=>setTimeout(r,2500));
     }
   }
 }
@@ -293,13 +293,13 @@ $("save").onclick = async () => {
       const f = $("file").files[0], url = $("url").value.trim();
       if(!f && !url) throw new Error("Choose a video file or paste a link.");
       if(!meta.title) meta.title = f ? f.name.replace(/\.[^.]+$/,"") : "Untitled clip";
-      if(f && f.size > 50*1024*1024) throw new Error("File is over 50 MB. Compress it or host it elsewhere and paste the link.");
+      if(f && f.size > 25*1024*1024) throw new Error("GitHub's web API can't reliably take files over about 25 MB. Compress the clip, or push it into the clips folder with git and enter its path (clips/name.mp4) in the link field.");
       const id = Date.now().toString(36);
       let clip = { id, ...meta, added:new Date().toISOString().slice(0,10) };
       if(f){
-        btn.textContent = "Uploading…";
+        btn.textContent = "Uploading… (large files can take a minute)";
         const name = `${id}-${f.name.replace(/[^\w.-]+/g,"_")}`;
-        await put(`${CFG.clipDir}/${name}`, await fileB64(f), `Add clip file: ${name}`);
+        await put(`${CFG.clipDir}/${name}`, await fileB64(f), `Add clip file: ${name}`).catch(e=>{throw new Error(/too large/i.test(e.message)?"GitHub refused the file as too large. Compress it below 25 MB or push it with git (see the link field).":e.message)});
         clip.src = `${CFG.clipDir}/${name}`; clip.preview = URL.createObjectURL(f);
       }else clip.src = url;
       clips.unshift(clip);
